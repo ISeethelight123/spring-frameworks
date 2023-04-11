@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 
 //容器就应该给Cat再创建一个对象
-@Component
+//@Component
 public class Cat {
 
 	public Cat(){

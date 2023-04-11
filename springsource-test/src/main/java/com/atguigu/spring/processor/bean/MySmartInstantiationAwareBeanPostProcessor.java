@@ -11,11 +11,13 @@ public class MySmartInstantiationAwareBeanPostProcessor implements SmartInstanti
 	public MySmartInstantiationAwareBeanPostProcessor(){
 		System.out.println("MySmartInstantiationAwareBeanPostProcessor...");
 	}
+	@Override
 	public Class<?> predictBeanType(Class<?> beanClass, String beanName) throws BeansException {
 		System.out.println("MySmartInstantiationAwareBeanPostProcessor...predictBeanType=>"+beanClass+"--"+beanName);
 		return null;
 	}
 
+	@Override
 	public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, String beanName)
 
 			throws BeansException {
@@ -24,6 +26,7 @@ public class MySmartInstantiationAwareBeanPostProcessor implements SmartInstanti
 		return null;
 	}
 
+	@Override
 	public Object getEarlyBeanReference(Object bean, String beanName) throws BeansException {
 		System.out.println("MySmartInstantiationAwareBeanPostProcessor...getEarlyBeanReference=>"+bean+"--"+beanName);
 

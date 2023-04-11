@@ -548,6 +548,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
 			// Prepare this context for refreshing.
+			// 准备此上下文以进行刷新。
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
@@ -634,13 +635,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		//初始化上下文环境中的任何占位符属性源
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
+		//验证标记为必需的所有属性是否可解析
 		// see ConfigurablePropertyResolver#setRequiredProperties
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
+		//存储预刷新应用程序侦听器
 		if (this.earlyApplicationListeners == null) {
 			this.earlyApplicationListeners = new LinkedHashSet<>(this.applicationListeners);
 		}
@@ -651,6 +655,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Allow for the collection of early ApplicationEvents,
+		//允许收集早期应用程序事件，
 		// to be published once the multicaster is available...
 		this.earlyApplicationEvents = new LinkedHashSet<>();
 	}

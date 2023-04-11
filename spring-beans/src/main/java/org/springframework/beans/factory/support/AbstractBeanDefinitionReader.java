@@ -86,6 +86,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		this.registry = registry;
 
 		// Determine ResourceLoader to use.
+		//确定要使用的资源加载程序。
 		if (this.registry instanceof ResourceLoader) {
 			this.resourceLoader = (ResourceLoader) this.registry;
 		}
@@ -219,6 +220,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 
 		if (resourceLoader instanceof ResourcePatternResolver) {
 			// Resource pattern matching available.
+			//提供资源模式匹配
 			try {
 				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location); //得到实体文件对应的资源
 				int count = loadBeanDefinitions(resources);
@@ -237,6 +239,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		}
 		else {
 			// Can only load single resources by absolute URL.
+			//只能通过绝对 URL 加载单个资源
 			Resource resource = resourceLoader.getResource(location);
 			int count = loadBeanDefinitions(resource);
 			if (actualResources != null) {
