@@ -762,7 +762,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * 实例化并调用所有注册的 BeanFactoryPostProcessor bean
 	 */
 	protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
-		//执行所有的工厂增强器
+		//实例化所有工厂增强器， 执行所有的工厂增强器
 		PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(beanFactory, getBeanFactoryPostProcessors());
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found in the meantime
