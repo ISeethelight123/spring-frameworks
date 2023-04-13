@@ -575,15 +575,20 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
+				// 初始化此上下文的消息源。
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
+				// 为上下文初始化广播事件
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
+				// 在特定上下文子类中初始化其他特殊 bean。
+				// 留给用户拓展
 				onRefresh();
 
 				// Check for listener beans and register them.
+				// 检查侦听器并注册它们。此时自定义的侦听器并没有实例化，在获取时才会去实例化
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
@@ -785,6 +790,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Initialize the MessageSource.
 	 * Use parent's if none defined in this context.
+	 * 初始化消息源。如果没有被重写使用父类实现
 	 */
 	protected void initMessageSource() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
@@ -866,6 +872,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
+	 * 模板方法，提供子类去实现
 	 * Template method which can be overridden to add context-specific refresh work.
 	 * Called on initialization of special beans, before instantiation of singletons.
 	 * <p>This implementation is empty.
@@ -878,10 +885,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Add beans that implement ApplicationListener as listeners.
+	 * 添加实现 ApplicationListener 的 bean 作为侦听器。
 	 * Doesn't affect other listeners, which can be added without being beans.
 	 */
 	protected void registerListeners() {
 		// Register statically specified listeners first.
+		// 首先注册静态指定的侦听器
 		for (ApplicationListener<?> listener : getApplicationListeners()) {
 			getApplicationEventMulticaster().addApplicationListener(listener);
 		}
@@ -894,6 +903,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Publish early application events now that we finally have a multicaster...
+		// 发布早期应用程序事件，现在我们终于有了多播器
 		Set<ApplicationEvent> earlyEventsToProcess = this.earlyApplicationEvents;
 		this.earlyApplicationEvents = null;
 		if (!CollectionUtils.isEmpty(earlyEventsToProcess)) {
@@ -906,6 +916,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Finish the initialization of this context's bean factory,
 	 * initializing all remaining singleton beans.
+	 * 完成此上下文的 Bean 工厂的初始化，初始化所有剩余的单例 Bean。
 	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
 		// Initialize conversion service for this context.
