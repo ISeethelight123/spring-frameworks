@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ *
+ * 单例bean 引用 原型bean
+ *
+ *
+ */
 
 public class MainTest {
 

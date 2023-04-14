@@ -8,6 +8,8 @@ com/atguigu/spring/bean/Hello.java
  com.atguigu.spring.bean.Hello
 com/atguigu/spring/config/MainConfig.java
  com.atguigu.spring.config.MainConfig
+com/atguigu/spring/config/Test.java
+ com.atguigu.spring.config.Test
 com/atguigu/spring/AnnotationMainTest.java
  com.atguigu.spring.AnnotationMainTest
 com/atguigu/spring/processor/factory/MyBeanFactoryPostProcessor.java

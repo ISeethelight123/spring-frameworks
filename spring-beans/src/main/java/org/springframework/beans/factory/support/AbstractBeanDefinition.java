@@ -388,6 +388,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return the current bean class name of this bean definition.
+	 * 当前bean的name
 	 */
 	@Override
 	@Nullable
@@ -920,6 +921,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return if there are method overrides defined for this bean.
+	 * 如果为此 Bean 定义了方法覆盖
 	 * @since 5.0.2
 	 */
 	public boolean hasMethodOverrides() {
@@ -1126,10 +1128,12 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Validate and prepare the method overrides defined for this bean.
 	 * Checks for existence of a method with the specified name.
+	 * 验证并准备为此 Bean 定义的方法覆盖。检查是否存在具有指定名称的方法
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
 	public void prepareMethodOverrides() throws BeanDefinitionValidationException {
 		// Check that lookup methods exist and determine their overloaded status.
+		// 检查查找方法是否存在并确定其重载状态。
 		if (hasMethodOverrides()) {
 			getMethodOverrides().getOverrides().forEach(this::prepareMethodOverride);
 		}
