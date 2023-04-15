@@ -92,10 +92,14 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	@Nullable
 	volatile String resolvedDestroyMethodName;
 
-	/** Common lock for the four constructor fields below. */
+	/** Common lock for the four constructor fields below.
+	 * 下面四个构造函数字段的公共锁。
+	 * */
 	final Object constructorArgumentLock = new Object();
 
-	/** Package-visible field for caching the resolved constructor or factory method. */
+	/** Package-visible field for caching the resolved constructor or factory method.
+	 * 包可见字段用于缓存解析的构造函数或工厂方法。
+	 * */
 	@Nullable
 	Executable resolvedConstructorOrFactoryMethod;
 
@@ -116,7 +120,9 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	/** Package-visible field that indicates MergedBeanDefinitionPostProcessor having been applied. */
 	boolean postProcessed = false;
 
-	/** Package-visible field that indicates a before-instantiation post-processor having kicked in. */
+	/** Package-visible field that indicates a before-instantiation post-processor having kicked in.
+	 *  包可见字段，指示实例化前的后处理器已启动
+	 * */
 	@Nullable
 	volatile Boolean beforeInstantiationResolved;
 
