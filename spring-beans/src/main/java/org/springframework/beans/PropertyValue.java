@@ -54,7 +54,9 @@ public class PropertyValue extends BeanMetadataAttributeAccessor implements Seri
 	@Nullable
 	private Object convertedValue;
 
-	/** Package-visible field that indicates whether conversion is necessary. */
+	/** Package-visible field that indicates whether conversion is necessary.
+	 * 指示是否需要转换的包可见字段
+	 * */
 	@Nullable
 	volatile Boolean conversionNecessary;
 
@@ -163,6 +165,7 @@ public class PropertyValue extends BeanMetadataAttributeAccessor implements Seri
 	/**
 	 * Return whether this holder contains a converted value already ({@code true}),
 	 * or whether the value still needs to be converted ({@code false}).
+	 * 返回此持有者是否已包含转换的值 （{@code true}），或者该值是否仍需要转换 （{@code false}）。
 	 */
 	public synchronized boolean isConverted() {
 		return this.converted;

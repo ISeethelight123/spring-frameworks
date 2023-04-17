@@ -17,6 +17,8 @@
 package org.springframework.beans.factory;
 
 /**
+ *
+ * Bean组件初始化以后对组件进行后续设置；在于额外处理；
  * Interface to be implemented by beans that need to react once all their properties
  * have been set by a {@link BeanFactory}: e.g. to perform custom initialization,
  * or merely to check that all mandatory properties have been set.
@@ -24,7 +26,7 @@ package org.springframework.beans.factory;
  * <p>An alternative to implementing {@code InitializingBean} is specifying a custom
  * init method, for example in an XML bean definition. For a list of all bean
  * lifecycle methods, see the {@link BeanFactory BeanFactory javadocs}.
- * Bean组件初始化以后对组件进行后续设置；在于额外处理；
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @see DisposableBean

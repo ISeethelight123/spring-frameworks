@@ -8,8 +8,8 @@ com/atguigu/spring/bean/Hello.java
  com.atguigu.spring.bean.Hello
 com/atguigu/spring/config/MainConfig.java
  com.atguigu.spring.config.MainConfig
-com/atguigu/spring/bean/Cat.java
- com.atguigu.spring.bean.Cat
+com/atguigu/spring/config/Test.java
+ com.atguigu.spring.config.Test
 com/atguigu/spring/processor/bean/MyInstantiationAwareBeanPostProcessor.java
  com.atguigu.spring.processor.bean.MyInstantiationAwareBeanPostProcessor
 com/atguigu/spring/processor/bean/MyMergedBeanDefinitionPostProcessor.java
@@ -22,9 +22,9 @@ com/atguigu/spring/processor/bean/MySmartInstantiationAwareBeanPostProcessor.jav
  com.atguigu.spring.processor.bean.MySmartInstantiationAwareBeanPostProcessor
 com/atguigu/spring/AnnotationMainTest.java
  com.atguigu.spring.AnnotationMainTest
-com/atguigu/spring/config/Test.java
- com.atguigu.spring.config.Test
 com/atguigu/spring/processor/factory/MyBeanFactoryPostProcessor.java
  com.atguigu.spring.processor.factory.MyBeanFactoryPostProcessor
 com/atguigu/spring/bean/Person.java
  com.atguigu.spring.bean.Person
+com/atguigu/spring/bean/Cat.java
+ com.atguigu.spring.bean.Cat

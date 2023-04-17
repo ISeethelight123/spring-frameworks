@@ -793,6 +793,7 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * Get the last component of the path. Also works if not nested.
+	 * 获取路径的最后一个组成部分。如果不嵌套也可以工作.
 	 * @param pa property accessor to work on
 	 * @param nestedPath property path we know is nested
 	 * @return last component of the path (the property on the target bean)

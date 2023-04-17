@@ -25,4 +25,9 @@ public class Cat {
 	public String getName() {
 		return name;
 	}
+
+	public void init(){
+		System.out.println("cat init");
+	}
+
 }
