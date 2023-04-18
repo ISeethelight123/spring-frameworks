@@ -50,7 +50,10 @@ public class AnnotatedGenericBeanDefinition extends GenericBeanDefinition implem
 
 
 	/**
+	 *
+	 * 为给定的 Bean 类创建新的注释泛型 BeanDefinition
 	 * Create a new AnnotatedGenericBeanDefinition for the given bean class.
+	 *
 	 * @param beanClass the loaded bean class
 	 */
 	public AnnotatedGenericBeanDefinition(Class<?> beanClass) {

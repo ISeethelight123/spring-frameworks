@@ -160,12 +160,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	public static final String APPLICATION_EVENT_MULTICASTER_BEAN_NAME = "applicationEventMulticaster";
 
 	/**
+	 * 由 {@code spring.spel.ignore} 系统属性控制的布尔标志，该属性指示 Spring 忽略 SpEL，即不初始化 SpEL 基础设施
 	 * Boolean flag controlled by a {@code spring.spel.ignore} system property that instructs Spring to
 	 * ignore SpEL, i.e. to not initialize the SpEL infrastructure.
 	 * <p>The default is "false".
 	 */
 	private static final boolean shouldIgnoreSpel = SpringProperties.getFlag("spring.spel.ignore");
-
 
 	static {
 		// Eagerly load the ContextClosedEvent class to avoid weird classloader issues
@@ -652,7 +652,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
-		//验证标记为必需的所有属性是否可解析
+		// 验证标记为必需的所有属性是否可解析
 		// see ConfigurablePropertyResolver#setRequiredProperties
 		getEnvironment().validateRequiredProperties();
 
@@ -719,7 +719,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.ignoreDependencyInterface(ApplicationContextAware.class);
 		beanFactory.ignoreDependencyInterface(ApplicationStartupAware.class);
 
-		// BeanFactory interface not registered as resolvable type in a plain factory.
+		//BeanFactory 接口未在普通工厂中注册为可解析类型 BeanFactory interface not registered as resolvable type in a plain factory.
 		// MessageSource registered (and found for autowiring) as a bean.
 		beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);
 		beanFactory.registerResolvableDependency(ResourceLoader.class, this);
@@ -731,7 +731,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found.
-		// 检测加载时间编织者并准备编织（如果找到）
+		// 检测加载LoadTimeWeaver并准备编织（如果找到）
 		if (!NativeDetector.inNativeImage() && beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
 			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
 			// Set a temporary ClassLoader for type matching.

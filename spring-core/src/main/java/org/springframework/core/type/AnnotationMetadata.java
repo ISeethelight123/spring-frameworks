@@ -117,6 +117,7 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 
 
 	/**
+	 * 使用标准反射为给定类创建新的实例的工厂方法。
 	 * Factory method to create a new {@link AnnotationMetadata} instance
 	 * for the given class using standard reflection.
 	 * @param type the class to introspect

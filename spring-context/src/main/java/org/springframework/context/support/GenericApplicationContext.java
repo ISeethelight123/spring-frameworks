@@ -100,7 +100,7 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	private ResourceLoader resourceLoader;
 
 	private boolean customClassLoader = false;
-
+	// 默认值false
 	private final AtomicBoolean refreshed = new AtomicBoolean();
 
 
