@@ -967,6 +967,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		// 为所有适用的 Bean 触发初始化后回调
 		for (String beanName : beanNames) {
 			Object singletonInstance = getSingleton(beanName);
+			// SmartInitializingSingleton#afterSingletonsInstantiated()方法
 			if (singletonInstance instanceof SmartInitializingSingleton) {
 				StartupStep smartInitialize = this.getApplicationStartup().start("spring.beans.smart-initialize")
 						.tag("beanName", beanName);

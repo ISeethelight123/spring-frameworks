@@ -17,6 +17,7 @@
 package org.springframework.context;
 
 /**
+ * 用于在应用程序上下文中处理生命周期 Bean 的策略界面.
  * Strategy interface for processing Lifecycle beans within the ApplicationContext.
  *
  * @author Mark Fisher

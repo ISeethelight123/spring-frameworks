@@ -192,8 +192,10 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		// 快速检查没有完全单例锁的现有实例
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+			// 二级缓存
 			singletonObject = this.earlySingletonObjects.get(beanName);
 			if (singletonObject == null && allowEarlyReference) {
+				// 从三级缓存寻找
 				synchronized (this.singletonObjects) {
 					// Consistent creation of early reference within full singleton lock
 					singletonObject = this.singletonObjects.get(beanName);
@@ -203,7 +205,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 							if (singletonFactory != null) {
 								singletonObject = singletonFactory.getObject();
+								// 添加到二级缓存中
 								this.earlySingletonObjects.put(beanName, singletonObject);
+								// 从三级缓存删除掉
 								this.singletonFactories.remove(beanName);
 							}
 						}
