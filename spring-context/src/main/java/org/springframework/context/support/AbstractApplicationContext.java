@@ -245,6 +245,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Create a new AbstractApplicationContext with no parent.
 	 */
 	public AbstractApplicationContext() {
+		//父类实现getResourcePatternResolver()
 		this.resourcePatternResolver = getResourcePatternResolver();
 	}
 
@@ -555,12 +556,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
-			// 工厂创建：BeanFactory第一次开始创建的时候,有xml解析逻辑。
-			// xml信息解析成了BeanDefinition
+			// 获取容器beanFactory,有xml解析逻辑，xml信息解析成了BeanDefinition
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
-			// 准备 Bean 工厂以在此上下文中使用
+			// 在上下文中准备beanFactory，向beanFactory中注册基础bean
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -569,7 +569,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
-				//工厂增强：执行所有的BeanFactory后置增强器；利用BeanFactory后置增强器对工厂进行修改或者增强,配置类会在这里进行解析。
+
+				//工厂增强：执行所有的BeanFactory后置增强器；利用BeanFactory后置增强器对工厂进行修改或者增强,
+				// 将会在这里根据配置类元信息扫描整个项目，将所有需要注册的bean，都解析成BeanDefinition
 				// Invoke factory processors registered as beans in the context.
 				invokeBeanFactoryPostProcessors(beanFactory);
 
@@ -648,16 +650,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
-		//初始化上下文环境中的任何占位符属性源
+		//初始化上下文环境中的任何占位符属性源，提供给子类实现
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
-		// 验证标记为必需的所有属性是否可解析
 		// see ConfigurablePropertyResolver#setRequiredProperties
+		//验证必填属性是否都有
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
-		//存储预刷新应用程序侦听器
+		// 保存应用前期的监听器
 		if (this.earlyApplicationListeners == null) {
 			this.earlyApplicationListeners = new LinkedHashSet<>(this.applicationListeners);
 		}
@@ -668,8 +670,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Allow for the collection of early ApplicationEvents,
-		//允许收集早期应用程序事件，
 		// to be published once the multicaster is available...
+		// 初始化早期事件收集器
 		this.earlyApplicationEvents = new LinkedHashSet<>();
 	}
 
@@ -696,7 +698,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Configure the factory's standard context characteristics,
 	 * such as the context's ClassLoader and post-processors.
-	 * 配置工厂的标准上下文特征，例如上下文的类加载器和后处理器。
+	 * 配置工厂的标准上下文特性，例如上下文的类加载器和后处理器。
 	 * @param beanFactory the BeanFactory to configure
 	 */
 	protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
@@ -710,7 +712,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// Configure the bean factory with context callbacks.
 		// 使用上下文回调配置 Bean 工厂
+		//添加 ApplicationContextAwareProcessor.class后置处理器
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+		//忽略掉一下bean依赖，在哪会用到，待分析？
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
 		beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);
@@ -719,35 +723,39 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.ignoreDependencyInterface(ApplicationContextAware.class);
 		beanFactory.ignoreDependencyInterface(ApplicationStartupAware.class);
 
-		//BeanFactory 接口未在普通工厂中注册为可解析类型 BeanFactory interface not registered as resolvable type in a plain factory.
+		// BeanFactory 接口未在普通工厂中注册为可解析类型 BeanFactory interface not registered as resolvable type in a plain factory.
 		// MessageSource registered (and found for autowiring) as a bean.
+		// 添加以下bean到内存中
 		beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);
 		beanFactory.registerResolvableDependency(ResourceLoader.class, this);
 		beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);
 		beanFactory.registerResolvableDependency(ApplicationContext.class, this);
 
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
-		// 注册BeanPostProcessor , 用于检测ApplicationListeners beans
+		// 注册BeanPostProcessor , 用于检测ApplicationListeners.class
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found.
-		// 检测加载LoadTimeWeaver并准备编织（如果找到）
+		// 运行时织入
 		if (!NativeDetector.inNativeImage() && beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
 			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
 			// Set a temporary ClassLoader for type matching.
 			beanFactory.setTempClassLoader(new ContextTypeMatchClassLoader(beanFactory.getBeanClassLoader()));
 		}
 
-		// Register default environment beans.
+		// 注册环境类单实例bean environment ---> getEnvironment()
 		if (!beanFactory.containsLocalBean(ENVIRONMENT_BEAN_NAME)) {
 			beanFactory.registerSingleton(ENVIRONMENT_BEAN_NAME, getEnvironment());
 		}
+		// 注册系统变量实例bean systemProperties ---> getEnvironment().getSystemProperties()
 		if (!beanFactory.containsLocalBean(SYSTEM_PROPERTIES_BEAN_NAME)) {
 			beanFactory.registerSingleton(SYSTEM_PROPERTIES_BEAN_NAME, getEnvironment().getSystemProperties());
 		}
+		// 注册环境env实例bean  systemEnvironment ---> getEnvironment().getSystemEnvironment()
 		if (!beanFactory.containsLocalBean(SYSTEM_ENVIRONMENT_BEAN_NAME)) {
 			beanFactory.registerSingleton(SYSTEM_ENVIRONMENT_BEAN_NAME, getEnvironment().getSystemEnvironment());
 		}
+		// 注册 ApplicationStartup实例
 		if (!beanFactory.containsLocalBean(APPLICATION_STARTUP_BEAN_NAME)) {
 			beanFactory.registerSingleton(APPLICATION_STARTUP_BEAN_NAME, getApplicationStartup());
 		}

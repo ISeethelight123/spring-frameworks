@@ -246,7 +246,8 @@ class ConfigurationClassParser {
 		// 递归处理配置类及其超类层次结构
 		// Recursively process the configuration class and its superclass hierarchy.
 		SourceClass sourceClass = asSourceClass(configClass, filter);
-		do { //解析配置类里面的所有注解，
+		do {
+			//解析配置类里面的所有注解，
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass, filter);
 		}
 		while (sourceClass != null);
@@ -269,6 +270,7 @@ class ConfigurationClassParser {
 
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
 			// Recursively process any member (nested) classes first
+			// 递归调用
 			processMemberClasses(configClass, sourceClass, filter);
 		}
 
@@ -292,6 +294,7 @@ class ConfigurationClassParser {
 				!this.conditionEvaluator.shouldSkip(sourceClass.getMetadata(), ConfigurationPhase.REGISTER_BEAN)) {
 			for (AnnotationAttributes componentScan : componentScans) {
 				// The config class is annotated with @ComponentScan -> perform the scan immediately
+				// 立即执行扫描进行注释
 				Set<BeanDefinitionHolder> scannedBeanDefinitions =
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
 				// Check the set of scanned definitions for any further config classes and parse recursively if needed
@@ -338,6 +341,7 @@ class ConfigurationClassParser {
 					!this.knownSuperclasses.containsKey(superclass)) {
 				this.knownSuperclasses.put(superclass, configClass);
 				// Superclass found, return its annotation metadata and recurse
+				// 找到超类，返回其注释元数据并递归
 				return sourceClass.getSuperClass();
 			}
 		}
@@ -380,6 +384,7 @@ class ConfigurationClassParser {
 	}
 
 	/**
+	 * 在配置类实现的接口上注册默认方法。
 	 * Register default methods on interfaces implemented by the configuration class.
 	 */
 	private void processInterfaces(ConfigurationClass configClass, SourceClass sourceClass) throws IOException {

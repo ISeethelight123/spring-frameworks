@@ -192,6 +192,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	}
 
 	/**
+	 * 注册默认筛选器，用于隐式注册带有 @Component，@Repository，@Controller，@ManagedBean,@Named的类
 	 * Register the default filter for {@link Component @Component}.
 	 * <p>This will implicitly register all annotations that have the
 	 * {@link Component @Component} meta-annotation including the

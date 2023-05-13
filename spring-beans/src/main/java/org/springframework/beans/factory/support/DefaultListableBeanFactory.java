@@ -154,6 +154,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private boolean allowEagerClassLoading = true;
 
 	/** Optional OrderComparator for dependency Lists and arrays. */
+
+	//这是什么时候初始化进去的？
 	@Nullable
 	private Comparator<Object> dependencyComparator;
 
@@ -289,6 +291,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
+	 * 返回此 BeanFactory 的依赖比较器（可能是 {@code null}
 	 * Return the dependency comparator for this BeanFactory (may be {@code null}.
 	 * @since 4.0
 	 */
@@ -1039,6 +1042,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 		else {
 			if (hasBeanCreationStarted()) {
+				// 无法再修改启动时集合元素（用于稳定迭代）
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
 				synchronized (this.beanDefinitionMap) {
 					this.beanDefinitionMap.put(beanName, beanDefinition); //注册进去了

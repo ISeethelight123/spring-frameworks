@@ -130,6 +130,7 @@ public abstract class AnnotationConfigUtils {
 
 
 	/**
+	 * 在给定注册表中注册所有相关的后置处理器
 	 * Register all relevant annotation post processors in the given registry.
 	 * @param registry the registry to operate on
 	 */
@@ -150,6 +151,7 @@ public abstract class AnnotationConfigUtils {
 
 		DefaultListableBeanFactory beanFactory = unwrapDefaultListableBeanFactory(registry);
 		if (beanFactory != null) {
+			// todo：调试的时候看下
 			if (!(beanFactory.getDependencyComparator() instanceof AnnotationAwareOrderComparator)) {
 				beanFactory.setDependencyComparator(AnnotationAwareOrderComparator.INSTANCE);
 			}
@@ -159,27 +161,26 @@ public abstract class AnnotationConfigUtils {
 		}
 
 		Set<BeanDefinitionHolder> beanDefs = new LinkedHashSet<>(8);
-
+		//注册 internalConfigurationAnnotationProcessor---> ConfigurationClassPostProcessor.class
 		if (!registry.containsBeanDefinition(CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(ConfigurationClassPostProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		// 注册 internalAutowiredAnnotationProcessor---> AutowiredAnnotationBeanPostProcessor.class
 		if (!registry.containsBeanDefinition(AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(AutowiredAnnotationBeanPostProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
-		// Check for JSR-250 support, and if present add the CommonAnnotationBeanPostProcessor.
+		//开启jsr250即注册 internalCommonAnnotationProcessor---> CommonAnnotationBeanPostProcessor.class
 		if (jsr250Present && !registry.containsBeanDefinition(COMMON_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(CommonAnnotationBeanPostProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, COMMON_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
 
-		// Check for JPA support, and if present add the PersistenceAnnotationBeanPostProcessor.
+		//开启jpa即注册 internalPersistenceAnnotationProcessor ---> PersistenceAnnotationBeanPostProcessor
 		if (jpaPresent && !registry.containsBeanDefinition(PERSISTENCE_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition();
 			try {
@@ -193,13 +194,13 @@ public abstract class AnnotationConfigUtils {
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, PERSISTENCE_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		//注册 internalEventListenerProcessor ---> EventListenerMethodProcessor.class
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(EventListenerMethodProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, EVENT_LISTENER_PROCESSOR_BEAN_NAME));
 		}
-
+		//注册 internalEventListenerFactory ---> DefaultEventListenerFactory.class
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_FACTORY_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(DefaultEventListenerFactory.class);
 			def.setSource(source);
@@ -222,6 +223,7 @@ public abstract class AnnotationConfigUtils {
 		if (registry instanceof DefaultListableBeanFactory) {
 			return (DefaultListableBeanFactory) registry;
 		}
+		//注解版走这里
 		else if (registry instanceof GenericApplicationContext) {
 			return ((GenericApplicationContext) registry).getDefaultListableBeanFactory();
 		}

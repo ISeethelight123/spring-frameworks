@@ -23,6 +23,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 一个bean需要给引用时 如果多个候选项有资格自动注入单值依赖项时，应优先选择 Bean。如果候选者中只存在一个“主”bean，它将被自动注入。
+ * 如果候选者中只存在一个“主”bean，它将是自动连线值。
  * Indicates that a bean should be given preference when multiple candidates
  * are qualified to autowire a single-valued dependency. If exactly one
  * 'primary' bean exists among the candidates, it will be the autowired value.

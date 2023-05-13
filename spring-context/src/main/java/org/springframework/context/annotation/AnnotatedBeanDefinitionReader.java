@@ -139,6 +139,7 @@ public class AnnotatedBeanDefinitionReader {
 	}
 
 	/**
+	 * 注册给定的bean，从类声明的注解中派生其元数据
 	 * Register a bean from the given bean class, deriving its metadata from
 	 * class-declared annotations.
 	 * @param beanClass the class of the bean
@@ -234,6 +235,7 @@ public class AnnotatedBeanDefinitionReader {
 	}
 
 	/**
+	 * 从给定的 Bean 类注册一个 Bean，从类的注释中派生其元数据。
 	 * Register a bean from the given bean class, deriving its metadata from
 	 * class-declared annotations.
 	 * @param beanClass the class of the bean
@@ -251,15 +253,17 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
+		//conditionEvaluator 通过解析 @Conditional 判断是否应该跳过
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
-
+		// 供应商，提供回调
 		abd.setInstanceSupplier(supplier);
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
 		abd.setScope(scopeMetadata.getScopeName());
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
 
+		//解析元数据，判断是否有 @Lazy @Primary @DependsOn @Role @Description注解，设置进BeanDefinition实例中
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
 		if (qualifiers != null) {
 			for (Class<? extends Annotation> qualifier : qualifiers) {
@@ -282,11 +286,13 @@ public class AnnotatedBeanDefinitionReader {
 
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+		//注册
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);
 	}
 
 
 	/**
+	 * 如果可能，请从给定的注册表中获取环境，否则返回新的标准环境
 	 * Get the Environment from the given registry if possible, otherwise return a new
 	 * StandardEnvironment.
 	 */

@@ -1,13 +1,14 @@
 package com.atguigu.spring.bean;
 
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
 //容器就应该给Cat再创建一个对象
 //@Component
-public class Cat {
+public class Cat implements InitializingBean {
 
 	public Cat(){
 		System.out.println("cat被创建了...");
@@ -30,4 +31,8 @@ public class Cat {
 		System.out.println("cat init");
 	}
 
+	@Override
+	public void afterPropertiesSet() throws Exception {
+
+	}
 }

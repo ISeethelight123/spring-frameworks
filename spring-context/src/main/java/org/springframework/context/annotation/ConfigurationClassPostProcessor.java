@@ -132,6 +132,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	@Nullable
 	private ConfigurationClassBeanDefinitionReader reader;
 
+	//这是什么标识？
 	private boolean localBeanNameGeneratorSet = false;
 
 	/* Using short class names as default bean names by default. */
@@ -229,6 +230,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	}
 
 	/**
+	 * 从注册表中的配置类派生更多 Bean 定义。
 	 * Derive further bean definitions from the configuration classes in the registry.
 	 */
 	@Override //把配置类中所有bean的定义信息导入进来。
@@ -248,6 +250,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	}
 
 	/**
+	 * 准备配置类，以便在运行时为 Bean 请求提供服务，方法是将它们替换为 CGLIB 增强的子类。
 	 * Prepare the Configuration classes for servicing bean requests at runtime
 	 * by replacing them with CGLIB-enhanced subclasses.
 	 */
@@ -262,6 +265,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		if (!this.registriesPostProcessed.contains(factoryId)) {
 			// BeanDefinitionRegistryPostProcessor hook apparently not supported...
 			// Simply call processConfigurationClasses lazily at this point then.
+			//解析配置类
 			processConfigBeanDefinitions((BeanDefinitionRegistry) beanFactory);
 		}
 
@@ -270,6 +274,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	}
 
 	/**
+	 * 基于 注册表构建和验证配置模型
 	 * Build and validate a configuration model based on the registry of
 	 * {@link Configuration} classes.
 	 */
@@ -279,13 +284,17 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 		for (String beanName : candidateNames) {
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
+			// 如果配置类已被解析，配置类Attribute属性会被设置ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE键值
 			if (beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE) != null) {
 				if (logger.isDebugEnabled()) {
+					//Bean 定义已作为配置类进行处理
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
 			}
+			//验证BeanDefinition是否是配置类
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
-				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName)); //将配置类加到候选集合里面，等待处理
+				//将配置类加到候选集合里面，等待处理
+				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
 		}
 
@@ -302,12 +311,16 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		});
 
 		// Detect any custom bean name generation strategy supplied through the enclosing application context
+		// 检测通过封闭应用程序上下文提供的任何自定义 Bean 名称生成策略
 		SingletonBeanRegistry sbr = null;
 		if (registry instanceof SingletonBeanRegistry) {
 			sbr = (SingletonBeanRegistry) registry;
 			if (!this.localBeanNameGeneratorSet) {
+				//getBean--getSingleton，获取创建一个internalConfigurationBeanNameGenerator来用来生成配置类的名字
+				//internalConfigurationBeanNameGenerator 这个bean是什么时候实例化进去的？
+				//验证看看internalConfigurationBeanNameGenerator到底是不是空的
 				BeanNameGenerator generator = (BeanNameGenerator) sbr.getSingleton(
-						AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR); //getBean--getSingleton，获取创建一个internalConfigurationBeanNameGenerator来用来生成配置类的名字
+						AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR);
 				if (generator != null) {
 					this.componentScanBeanNameGenerator = generator;
 					this.importBeanNameGenerator = generator;

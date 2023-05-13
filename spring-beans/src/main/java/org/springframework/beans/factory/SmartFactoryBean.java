@@ -61,6 +61,7 @@ public interface SmartFactoryBean<T> extends FactoryBean<T> {
 	}
 
 	/**
+	 * 、这个 FactoryBean 是否期望紧急初始化
 	 * Does this FactoryBean expect eager initialization, that is,
 	 * eagerly initialize itself as well as expect eager initialization
 	 * of its singleton object (if any)?
