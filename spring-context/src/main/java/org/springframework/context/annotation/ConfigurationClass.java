@@ -35,6 +35,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ * 表示用户定义的 {@link @Configuration} 类。包括一组 {@link Bean} 方法，包括类祖先中定义的所有此类方法，以“扁平化”的方式
  * Represents a user-defined {@link Configuration @Configuration} class.
  * Includes a set of {@link Bean} methods, including all such methods
  * defined in the ancestry of the class, in a 'flattened-out' manner.
@@ -57,11 +58,14 @@ final class ConfigurationClass {
 
 	private final Set<ConfigurationClass> importedBy = new LinkedHashSet<>(1);
 
+	// 存储该配置类里所有标注@Bean注解的方法
 	private final Set<BeanMethod> beanMethods = new LinkedHashSet<>();
 
+	// 用Map保存着@ImportResource 导入进来的资源们~
 	private final Map<String, Class<? extends BeanDefinitionReader>> importedResources =
 			new LinkedHashMap<>();
 
+	// 用Map保存着@Import中实现了`ImportBeanDefinitionRegistrar`接口的内容~
 	private final Map<ImportBeanDefinitionRegistrar, AnnotationMetadata> importBeanDefinitionRegistrars =
 			new LinkedHashMap<>();
 

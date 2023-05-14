@@ -56,6 +56,7 @@ public class AnnotatedGenericBeanDefinition extends GenericBeanDefinition implem
 	 * @param beanClass the loaded bean class
 	 */
 	public AnnotatedGenericBeanDefinition(Class<?> beanClass) {
+		//指定beanClass属性
 		setBeanClass(beanClass);
 		this.metadata = AnnotationMetadata.introspect(beanClass);
 	}

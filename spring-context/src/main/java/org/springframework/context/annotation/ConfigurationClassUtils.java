@@ -75,6 +75,7 @@ abstract class ConfigurationClassUtils {
 
 
 	/**
+	 * 检查给定的 Bean 定义是否是配置类（或在配置组件类中的内部类，也要自动注册）的候选者，并相应地对其进行标记。
 	 * Check whether the given bean definition is a candidate for a configuration class
 	 * (or a nested component class declared within a configuration/component class,
 	 * to be auto-registered as well), and mark it accordingly.
@@ -125,10 +126,12 @@ abstract class ConfigurationClassUtils {
 			}
 		}
 
+
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
+		// 类中是否有以下注解 @Component，@ComponentScan，@Import，@ImportResource，@Bean
 		else if (config != null || isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}

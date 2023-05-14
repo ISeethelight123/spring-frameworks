@@ -499,6 +499,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 		for (Resource rootDirResource : rootDirResources) {
 			rootDirResource = resolveRootDirResource(rootDirResource);
 			URL rootDirUrl = rootDirResource.getURL();
+			//protocol startsWith("bundle")
 			if (equinoxResolveMethod != null && rootDirUrl.getProtocol().startsWith("bundle")) {
 				URL resolvedUrl = (URL) ReflectionUtils.invokeMethod(equinoxResolveMethod, null, rootDirUrl);
 				if (resolvedUrl != null) {
@@ -506,6 +507,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 				}
 				rootDirResource = new UrlResource(rootDirUrl);
 			}
+			//protocol startsWith("vfs")
 			if (rootDirUrl.getProtocol().startsWith(ResourceUtils.URL_PROTOCOL_VFS)) {
 				result.addAll(VfsResourceMatchingDelegate.findMatchingResources(rootDirUrl, subPattern, getPathMatcher()));
 			}
@@ -577,6 +579,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	}
 
 	/**
+	 * 通过 Ant 样式的路径匹配器查找 jar 文件中与给定位置模式匹配的所有资源。
 	 * Find all resources in jar files that match the given location pattern
 	 * via the Ant-style PathMatcher.
 	 * @param rootDirResource the root directory as Resource
@@ -599,6 +602,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 
 		if (con instanceof JarURLConnection) {
 			// Should usually be the case for traditional JAR files.
+			// 传统 JAR 文件通常应该如此。
 			JarURLConnection jarCon = (JarURLConnection) con;
 			ResourceUtils.useCachesIfNecessary(jarCon);
 			jarFile = jarCon.getJarFile();

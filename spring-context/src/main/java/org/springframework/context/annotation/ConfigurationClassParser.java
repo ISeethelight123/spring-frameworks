@@ -172,6 +172,7 @@ class ConfigurationClassParser {
 			BeanDefinition bd = holder.getBeanDefinition();
 			try {
 				if (bd instanceof AnnotatedBeanDefinition) {
+					//注解驱动走这里
 					parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());
 				}
 				else if (bd instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) bd).hasBeanClass()) {
@@ -189,7 +190,7 @@ class ConfigurationClassParser {
 						"Failed to parse configuration class [" + bd.getBeanClassName() + "]", ex);
 			}
 		}
-
+		// 最最最后面才处理实现了DeferredImportSelector接口的类，最最后哦~~
 		this.deferredImportSelectorHandler.process();
 	}
 
@@ -223,10 +224,13 @@ class ConfigurationClassParser {
 
 
 	protected void processConfigurationClass(ConfigurationClass configClass, Predicate<String> filter) throws IOException {
+		//条件判断
+		// ConfigurationPhase枚举类型的作用：ConfigurationPhase的作用就是根据条件来判断是否加载这个配置类
 		if (this.conditionEvaluator.shouldSkip(configClass.getMetadata(), ConfigurationPhase.PARSE_CONFIGURATION)) {
 			return;
 		}
 
+		// 如果这个配置类已经存在了,后面又被@Import进来了~~~会走这里 然后做属性合并~
 		ConfigurationClass existingClass = this.configurationClasses.get(configClass);
 		if (existingClass != null) {
 			if (configClass.isImported()) {
@@ -243,15 +247,19 @@ class ConfigurationClassParser {
 				this.knownSuperclasses.values().removeIf(configClass::equals);
 			}
 		}
-		// 递归处理配置类及其超类层次结构
+
+		// 递归处理配置类及其超类, 返回一个superclass
 		// Recursively process the configuration class and its superclass hierarchy.
 		SourceClass sourceClass = asSourceClass(configClass, filter);
+		// 请注意此处：while递归，只要方法不返回null，就会一直do下去
 		do {
-			//解析配置类里面的所有注解，
+			// doProcessConfigurationClass 这个方法是解析配置文件的核心方法
+			// 如果有父类，sourceClass就不为空，继续解析
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass, filter);
 		}
 		while (sourceClass != null);
 
+		// 保存我们所有的配置类  注意：它是一个LinkedHashMap，所以是有序的
 		this.configurationClasses.put(configClass, configClass);
 	}
 
@@ -269,8 +277,7 @@ class ConfigurationClassParser {
 			throws IOException {
 
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
-			// Recursively process any member (nested) classes first
-			// 递归调用
+			// 有内部类的，符合条件先解析内部类的
 			processMemberClasses(configClass, sourceClass, filter);
 		}
 
@@ -294,7 +301,7 @@ class ConfigurationClassParser {
 				!this.conditionEvaluator.shouldSkip(sourceClass.getMetadata(), ConfigurationPhase.REGISTER_BEAN)) {
 			for (AnnotationAttributes componentScan : componentScans) {
 				// The config class is annotated with @ComponentScan -> perform the scan immediately
-				// 立即执行扫描进行注释
+				// 返回的是扫描得到的所有的bd。componentScanParser直接将扫描到的注册了
 				Set<BeanDefinitionHolder> scannedBeanDefinitions =
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
 				// Check the set of scanned definitions for any further config classes and parse recursively if needed
@@ -304,6 +311,8 @@ class ConfigurationClassParser {
 						bdCand = holder.getBeanDefinition();
 					}
 					if (ConfigurationClassUtils.checkConfigurationClassCandidate(bdCand, this.metadataReaderFactory)) {
+						// 检查扫描出来的类是否是配置类，如果是的，立即parse
+						// 从parse()方法中递归
 						parse(bdCand.getBeanClassName(), holder.getBeanName());
 					}
 				}
@@ -337,6 +346,7 @@ class ConfigurationClassParser {
 		// Process superclass, if any
 		if (sourceClass.getMetadata().hasSuperClass()) {
 			String superclass = sourceClass.getMetadata().getSuperClassName();
+			// 为什么不能startsWith("java")
 			if (superclass != null && !superclass.startsWith("java") &&
 					!this.knownSuperclasses.containsKey(superclass)) {
 				this.knownSuperclasses.put(superclass, configClass);
@@ -351,6 +361,7 @@ class ConfigurationClassParser {
 	}
 
 	/**
+	 * 注册成员（嵌套）类，这些类恰好是配置类本身。
 	 * Register member (nested) classes that happen to be configuration classes themselves.
 	 */
 	private void processMemberClasses(ConfigurationClass configClass, SourceClass sourceClass,
@@ -358,21 +369,26 @@ class ConfigurationClassParser {
 
 		Collection<SourceClass> memberClasses = sourceClass.getMemberClasses();
 		if (!memberClasses.isEmpty()) {
+			//配置类候选池
 			List<SourceClass> candidates = new ArrayList<>(memberClasses.size());
 			for (SourceClass memberClass : memberClasses) {
 				if (ConfigurationClassUtils.isConfigurationCandidate(memberClass.getMetadata()) &&
 						!memberClass.getMetadata().getClassName().equals(configClass.getMetadata().getClassName())) {
+					//添加configClass内部类中的配置类
 					candidates.add(memberClass);
 				}
 			}
 			OrderComparator.sort(candidates);
 			for (SourceClass candidate : candidates) {
+				// importStack 是做什么的
 				if (this.importStack.contains(configClass)) {
 					this.problemReporter.error(new CircularImportProblem(configClass, this.importStack));
 				}
 				else {
 					this.importStack.push(configClass);
 					try {
+						// 解析配置类的内部配置类
+						// 递归执行 processConfigurationClass()
 						processConfigurationClass(candidate.asConfigClass(configClass), filter);
 					}
 					finally {
@@ -640,6 +656,7 @@ class ConfigurationClassParser {
 
 
 	/**
+	 * 工厂方法，用于从 {@link ConfigurationClass} 获取 {@link SourceClass}
 	 * Factory method to obtain a {@link SourceClass} from a {@link ConfigurationClass}.
 	 */
 	private SourceClass asSourceClass(ConfigurationClass configurationClass, Predicate<String> filter) throws IOException {
@@ -655,9 +672,11 @@ class ConfigurationClassParser {
 	 */
 	SourceClass asSourceClass(@Nullable Class<?> classType, Predicate<String> filter) throws IOException {
 		if (classType == null || filter.test(classType.getName())) {
+			// Object.class
 			return this.objectSourceClass;
 		}
 		try {
+			// 健全性测试，我们可以反射性地阅读注解，包括类属性;如果不是 ->则回退到 ASM
 			// Sanity test that we can reflectively read annotations,
 			// including Class attributes; if not -> fall back to ASM
 			for (Annotation ann : classType.getDeclaredAnnotations()) {
@@ -919,6 +938,7 @@ class ConfigurationClassParser {
 
 
 	/**
+	 * 简单的包装器，允许以统一的方式处理带注释的源类，无论它们是如何加载的
 	 * Simple wrapper that allows annotated source classes to be dealt with
 	 * in a uniform manner, regardless of how they are loaded.
 	 */

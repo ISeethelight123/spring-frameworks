@@ -311,6 +311,7 @@ public abstract class AnnotationConfigUtils {
 		}
 
 		// Return merged result
+		// 返回一个不可修改的bean
 		return Collections.unmodifiableSet(result);
 	}
 
