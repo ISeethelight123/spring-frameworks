@@ -12,14 +12,14 @@ com/atguigu/spring/config/Test.java
  com.atguigu.spring.config.Test
 com/atguigu/spring/processor/bean/MyInstantiationAwareBeanPostProcessor.java
  com.atguigu.spring.processor.bean.MyInstantiationAwareBeanPostProcessor
-com/atguigu/spring/processor/bean/MyMergedBeanDefinitionPostProcessor.java
- com.atguigu.spring.processor.bean.MyMergedBeanDefinitionPostProcessor
+com/atguigu/spring/processor/bean/MySmartInstantiationAwareBeanPostProcessor.java
+ com.atguigu.spring.processor.bean.MySmartInstantiationAwareBeanPostProcessor
 com/atguigu/spring/processor/factory/MyBeanDefinitionRegistryPostProcessor.java
  com.atguigu.spring.processor.factory.MyBeanDefinitionRegistryPostProcessor
 com/atguigu/spring/processor/factory/MyBeanFactoryPostProcessor.java
  com.atguigu.spring.processor.factory.MyBeanFactoryPostProcessor
-com/atguigu/spring/processor/bean/MySmartInstantiationAwareBeanPostProcessor.java
- com.atguigu.spring.processor.bean.MySmartInstantiationAwareBeanPostProcessor
+com/atguigu/spring/processor/bean/MyMergedBeanDefinitionPostProcessor.java
+ com.atguigu.spring.processor.bean.MyMergedBeanDefinitionPostProcessor
 com/atguigu/spring/MainTest.java
  com.atguigu.spring.MainTest
 com/atguigu/spring/AnnotationMainTest.java

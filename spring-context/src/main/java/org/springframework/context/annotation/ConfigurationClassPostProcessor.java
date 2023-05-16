@@ -317,7 +317,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			if (!this.localBeanNameGeneratorSet) {
 				//getBean--getSingleton，获取创建一个internalConfigurationBeanNameGenerator来用来生成配置类的名字
 				//internalConfigurationBeanNameGenerator 这个bean是什么时候实例化进去的？
-				//验证看看internalConfigurationBeanNameGenerator到底是不是空的
+				//internalConfigurationBeanNameGenerator是空的
 				BeanNameGenerator generator = (BeanNameGenerator) sbr.getSingleton(
 						AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR);
 				if (generator != null) {
