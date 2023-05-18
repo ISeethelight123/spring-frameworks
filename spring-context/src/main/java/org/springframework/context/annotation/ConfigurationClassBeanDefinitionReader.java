@@ -155,6 +155,7 @@ class ConfigurationClassBeanDefinitionReader {
 		}
 
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+		// 在此调用  ImportBeanDefinitionRegistrar#registerBeanDefinitions()
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 
@@ -212,6 +213,7 @@ class ConfigurationClassBeanDefinitionReader {
 			this.registry.registerAlias(beanName, alias);
 		}
 
+		// 这在之前是否被有效地覆盖过（例如通过XML）
 		// Has this effectively been overridden before (e.g. via XML)?
 		if (isOverriddenByExistingDefinition(beanMethod, beanName)) {
 			if (beanName.equals(beanMethod.getConfigurationClass().getBeanName())) {
@@ -237,6 +239,7 @@ class ConfigurationClassBeanDefinitionReader {
 		}
 		else {
 			// instance @Bean method
+			// 实例@Bean方法
 			beanDef.setFactoryBeanName(configClass.getBeanName());
 			beanDef.setUniqueFactoryMethodName(methodName);
 		}
@@ -249,6 +252,7 @@ class ConfigurationClassBeanDefinitionReader {
 		beanDef.setAttribute(org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor.
 				SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);
 
+		// 处理 @Lazy，@Primary，@DependsOn，@Role，@Description注解
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(beanDef, metadata);
 
 		Autowire autowire = bean.getEnum("autowire");
@@ -388,6 +392,7 @@ class ConfigurationClassBeanDefinitionReader {
 				}
 			}
 
+			// 限定相对路径位置，如在 AbstractContextLoader.modifyLocations 中完成的那样
 			// TODO SPR-6310: qualify relative path locations as done in AbstractContextLoader.modifyLocations
 			reader.loadBeanDefinitions(resource);
 		});

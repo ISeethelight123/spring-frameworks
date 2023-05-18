@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 //容器就应该给Cat再创建一个对象
 //@Component
-public class Cat implements InitializingBean {
+public class Cat {
 
 	public Cat(){
 		System.out.println("cat被创建了...");
@@ -29,10 +29,5 @@ public class Cat implements InitializingBean {
 
 	public void init(){
 		System.out.println("cat init");
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-
 	}
 }
