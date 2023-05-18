@@ -275,7 +275,7 @@ class ConfigurationClassParser {
 	protected final SourceClass doProcessConfigurationClass(
 			ConfigurationClass configClass, SourceClass sourceClass, Predicate<String> filter)
 			throws IOException {
-		//这里为什么是true？
+		//这里为什么是true？注意看是否有注解继承
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
 			// 有内部类的，符合条件先解析内部类的
 			processMemberClasses(configClass, sourceClass, filter);

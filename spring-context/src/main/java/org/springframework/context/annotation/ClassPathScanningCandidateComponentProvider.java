@@ -432,6 +432,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				if (resource.isReadable()) {
 					try {
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
+						// 扫出带@Component，@Repository，@Controller，@ManagedBean,@Named的类
 						if (isCandidateComponent(metadataReader)) {
 							ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
 							sbd.setSource(resource);
@@ -443,6 +444,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 							}
 							else {
 								if (debugEnabled) {
+									// 被忽略，因为不是具体的顶级类：
 									logger.debug("Ignored because not a concrete top-level class: " + resource);
 								}
 							}
@@ -521,6 +523,8 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	}
 
 	/**
+	 * 确定给定的 Bean 定义是否符合候选条件。
+	 * <p>默认实现检查类是否不是接口，并且不依赖于封闭类。 <p>可以在子类中重写。
 	 * Determine whether the given bean definition qualifies as candidate.
 	 * <p>The default implementation checks whether the class is not an interface
 	 * and not dependent on an enclosing class.

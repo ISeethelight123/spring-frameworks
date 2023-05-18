@@ -289,6 +289,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 					definitionHolder =
 							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
 					beanDefinitions.add(definitionHolder);
+					// 扫描出来的BeanDefinition直接先注册到Map中
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}
@@ -350,6 +351,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	}
 
 	/**
+	 * 确定给定的新 Bean 定义是否与给定的现有 Bean 定义兼容。
 	 * Determine whether the given new bean definition is compatible with
 	 * the given existing bean definition.
 	 * <p>The default implementation considers them as compatible when the existing
@@ -361,7 +363,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * new definition to be skipped in favor of the existing definition
 	 */
 	protected boolean isCompatible(BeanDefinition newDefinition, BeanDefinition existingDefinition) {
-		return (!(existingDefinition instanceof ScannedGenericBeanDefinition) ||  // explicitly registered overriding bean
+		return (!(existingDefinition instanceof ScannedGenericBeanDefinition) ||  //显式注册的覆盖 Bean explicitly registered overriding bean
 				(newDefinition.getSource() != null && newDefinition.getSource().equals(existingDefinition.getSource())) ||  // scanned same file twice
 				newDefinition.equals(existingDefinition));  // scanned equivalent class twice
 	}
