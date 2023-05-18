@@ -74,7 +74,7 @@ class ComponentScanAnnotationParser {
 
 
 	public Set<BeanDefinitionHolder> parse(AnnotationAttributes componentScan, final String declaringClass) {
-		//定义了默认扫描规则 带有 @Component，@Repository，@Controller，@ManagedBean,@Named的类
+		//定义了默认扫描规则 带有 @Component，@Repository，@Service，@Controller，@ManagedBean,@Named的类
 		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,
 				componentScan.getBoolean("useDefaultFilters"), this.environment, this.resourceLoader);
 
