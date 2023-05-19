@@ -1,6 +1,7 @@
 package com.atguigu.spring.bean;
 
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.stereotype.Component;
 
 /**
  * 工厂bean
@@ -12,11 +13,12 @@ import org.springframework.beans.factory.FactoryBean;
  * 		MyBatis和Spring的整合	SqlSessionFactoryBean
  */
 
+//@Component  //也可以实现 SmartFactoryBean。指定提前加载
 public class HelloFactory implements FactoryBean<Hello> {
 
 	@Override
 	public Hello getObject() throws Exception {
-		return new Hello();
+		return new Hello(); //这是最终获取到的对象
 	}
 
 	@Override

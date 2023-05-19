@@ -14,7 +14,7 @@ public class MyMergedBeanDefinitionPostProcessor implements MergedBeanDefinition
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		System.out.println("MyMergedBeanDefinitionPostProcessor...postProcessBeforeInitialization...=>"+bean+"--"+beanName);
-		return null;
+		return bean; //null
 	}
 
 	@Override

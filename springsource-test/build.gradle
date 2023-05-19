@@ -11,6 +11,10 @@ repositories {
 
 dependencies {
     compile(project(":spring-context"))
+    compile(project(":spring-aspects"))  //引入aop&切面模块
+//    compile(project(":spring-jdbc")) //引入事务
+//    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+//    implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.49'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
