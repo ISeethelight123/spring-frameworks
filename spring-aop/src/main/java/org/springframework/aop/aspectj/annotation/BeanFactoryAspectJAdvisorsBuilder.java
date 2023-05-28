@@ -81,7 +81,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 	 * @see #isEligibleBean
 	 */
 	public List<Advisor> buildAspectJAdvisors() {
-		List<String> aspectNames = this.aspectBeanNames; //他是怎么知道切面名字的
+		List<String> aspectNames = this.aspectBeanNames; //他是怎么知道切面名字的 第一次进来是空的
 		//双检查锁的写法
 		if (aspectNames == null) {
 			synchronized (this) {
@@ -101,7 +101,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 						if (beanType == null) {
 							continue;
 						}
-						if (this.advisorFactory.isAspect(beanType)) {
+						if (this.advisorFactory.isAspect(beanType)) { //判断是否是切面
 							aspectNames.add(beanName); //每一个组件都先判断是否是切面，如果是放在集合中
 							AspectMetadata amd = new AspectMetadata(beanType, beanName);
 							if (amd.getAjType().getPerClause().getKind() == PerClauseKind.SINGLETON) {

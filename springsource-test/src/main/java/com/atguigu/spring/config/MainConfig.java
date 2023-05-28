@@ -41,22 +41,22 @@ public class MainConfig {
 	 * 	RootBeanDefinition
 	 *
 	 */
-	static class MyImportRegistrar implements ImportBeanDefinitionRegistrar{
-		@Override
-		public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
-											BeanDefinitionRegistry registry) {
-
-
-			// BeanDefinition
-			RootBeanDefinition catDefinition = new RootBeanDefinition();
-			catDefinition.setBeanClass(Cat.class);
-//			catDefinition.setInitMethodName("aaa");
-			//可以声明定义信息，包括我需要自动装配什么？
-//			catDefinition.setInstanceSupplier(()-> new Cat());
-			//Spring 这个实例的类型，名字
-			registry.registerBeanDefinition("tomCat",catDefinition);
-		}
-	}
+//	static class MyImportRegistrar implements ImportBeanDefinitionRegistrar{
+//		@Override
+//		public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
+//											BeanDefinitionRegistry registry) {
+//
+//
+//			// BeanDefinition
+//			RootBeanDefinition catDefinition = new RootBeanDefinition();
+//			catDefinition.setBeanClass(Cat.class);
+////			catDefinition.setInitMethodName("aaa");
+//			//可以声明定义信息，包括我需要自动装配什么？
+////			catDefinition.setInstanceSupplier(()-> new Cat());
+//			//Spring 这个实例的类型，名字
+//			registry.registerBeanDefinition("tomCat",catDefinition);
+//		}
+//	}
 }
 
 

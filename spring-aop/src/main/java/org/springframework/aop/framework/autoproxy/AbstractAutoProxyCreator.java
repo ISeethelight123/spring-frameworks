@@ -249,7 +249,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 				return null;
 			} //所有增强了的组件会被缓存在advisedBeans，如果我们需要增强的bean，我们就放在缓存中
 			if (isInfrastructureClass(beanClass) || shouldSkip(beanClass, beanName)) {
-				this.advisedBeans.put(cacheKey, Boolean.FALSE);
+				this.advisedBeans.put(cacheKey, Boolean.FALSE);//拥有@Aspect注解的会进来
 				return null;
 			}
 		}
