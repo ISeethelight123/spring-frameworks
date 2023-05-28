@@ -246,13 +246,13 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 		nestedPa.setPropertyValue(tokens, new PropertyValue(propertyName, value));
 	}
 
-	@Override
+	@Override  //利用反射进行属性赋值的办法 PropertyValue
 	public void setPropertyValue(PropertyValue pv) throws BeansException {
 		PropertyTokenHolder tokens = (PropertyTokenHolder) pv.resolvedTokens;
 		if (tokens == null) {
 			String propertyName = pv.getName();
 			AbstractNestablePropertyAccessor nestedPa;
-			try {
+			try { //级联属性的赋值都没问题
 				nestedPa = getPropertyAccessorForPropertyPath(propertyName);
 			}
 			catch (NotReadablePropertyException ex) {
@@ -793,7 +793,6 @@ public abstract class AbstractNestablePropertyAccessor extends AbstractPropertyA
 
 	/**
 	 * Get the last component of the path. Also works if not nested.
-	 * 获取路径的最后一个组成部分。如果不嵌套也可以工作.
 	 * @param pa property accessor to work on
 	 * @param nestedPath property path we know is nested
 	 * @return last component of the path (the property on the target bean)

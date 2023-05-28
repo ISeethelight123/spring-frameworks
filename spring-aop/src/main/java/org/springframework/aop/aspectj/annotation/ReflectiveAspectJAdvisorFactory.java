@@ -71,9 +71,9 @@ import org.springframework.util.comparator.InstanceComparator;
 @SuppressWarnings("serial")
 public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFactory implements Serializable {
 
-	// Exclude @Pointcut methods  排除@Pointcut methods
+	// Exclude @Pointcut methods
 	private static final MethodFilter adviceMethodFilter = ReflectionUtils.USER_DECLARED_METHODS
-			.and(method -> (AnnotationUtils.getAnnotation(method, Pointcut.class) == null));
+			.and(method -> (AnnotationUtils.getAnnotation(method, Pointcut.class) == null)); //切入点表达式的
 
 	private static final Comparator<Method> adviceMethodComparator;
 
@@ -120,7 +120,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 	}
 
 
-	@Override
+	@Override //找到切面里面定义的所有增强器
 	public List<Advisor> getAdvisors(MetadataAwareAspectInstanceFactory aspectInstanceFactory) {
 		Class<?> aspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();
 		String aspectName = aspectInstanceFactory.getAspectMetadata().getAspectName();
@@ -131,7 +131,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		MetadataAwareAspectInstanceFactory lazySingletonAspectInstanceFactory =
 				new LazySingletonAspectInstanceFactoryDecorator(aspectInstanceFactory);
 
-		List<Advisor> advisors = new ArrayList<>();
+		List<Advisor> advisors = new ArrayList<>(); //收集所有增强器
 		for (Method method : getAdvisorMethods(aspectClass)) {
 			// Prior to Spring Framework 5.2.7, advisors.size() was supplied as the declarationOrderInAspect
 			// to getAdvisor(...) to represent the "current position" in the declared methods list.
@@ -140,7 +140,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 			// Thus, we now hard code the declarationOrderInAspect to 0 for all advice methods
 			// discovered via reflection in order to support reliable advice ordering across JVM launches.
 			// Specifically, a value of 0 aligns with the default value used in
-			// AspectJPrecedenceComparator.getAspectDeclarationOrder(Advisor).
+			// AspectJPrecedenceComparator.getAspectDeclarationOrder(Advisor). //分析如果当前方法是通知方法则封装为Advisor
 			Advisor advisor = getAdvisor(method, lazySingletonAspectInstanceFactory, 0, aspectName);
 			if (advisor != null) {
 				advisors.add(advisor);
@@ -153,7 +153,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 			advisors.add(0, instantiationAdvisor);
 		}
 
-		// Find introduction fields.
+		// 需要增强的属性： @DeclareParents ； Find introduction fields.
 		for (Field field : aspectClass.getDeclaredFields()) {
 			Advisor advisor = getDeclareParentsAdvisor(field);
 			if (advisor != null) {
@@ -165,8 +165,8 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 	}
 
 	private List<Method> getAdvisorMethods(Class<?> aspectClass) {
-		List<Method> methods = new ArrayList<>();
-		ReflectionUtils.doWithMethods(aspectClass, methods::add, adviceMethodFilter); //父类的方法会一起收集起来
+		List<Method> methods = new ArrayList<>(); //methods.add(method)
+		ReflectionUtils.doWithMethods(aspectClass, methods::add, adviceMethodFilter);
 		if (methods.size() > 1) {
 			methods.sort(adviceMethodComparator);
 		}

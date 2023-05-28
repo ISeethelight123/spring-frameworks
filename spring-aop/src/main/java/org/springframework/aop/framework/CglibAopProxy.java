@@ -660,14 +660,14 @@ class CglibAopProxy implements AopProxy, Serializable {
 		}
 
 		@Override
-		@Nullable
+		@Nullable //回调方法
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
 			Object oldProxy = null;
 			boolean setProxyContext = false;
 			Object target = null;
 			TargetSource targetSource = this.advised.getTargetSource();
-			try {
-				if (this.advised.exposeProxy) {
+			try {  //exposeProxy：暴露代理对象，使用了代理对象就有增强功能
+				if (this.advised.exposeProxy) { //使用ThreadLocal线程共享这个代理对象；（异步事务）
 					// Make invocation available if necessary.
 					oldProxy = AopContext.setCurrentProxy(proxy);
 					setProxyContext = true;
@@ -676,7 +676,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 				target = targetSource.getTarget();
 				Class<?> targetClass = (target != null ? target.getClass() : null);
 				List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
-				Object retVal;
+				Object retVal;  //chain是AOP后置处理器在第一次的时候就生成好的5个增强器，然后封装成的MethodInterceptor
 				// Check whether we only have one InvokerInterceptor: that is,
 				// no real advice, but just reflective invocation of the target.
 				if (chain.isEmpty() && Modifier.isPublic(method.getModifiers())) {
@@ -687,8 +687,8 @@ class CglibAopProxy implements AopProxy, Serializable {
 					Object[] argsToUse = AopProxyUtils.adaptArgumentsIfNecessary(method, args);
 					retVal = methodProxy.invoke(target, argsToUse);
 				}
-				else {
-					// We need to create a method invocation...
+				else { //CglibMethodInvocation【FilterChain（维护索引）】，5个MethodInterceptor就是Filter
+					//创建一个方法执行的东西(拦截器链在此执行) We need to create a method invocation...
 					retVal = new CglibMethodInvocation(proxy, target, method, args, targetClass, chain, methodProxy).proceed();
 				}
 				retVal = processReturnType(proxy, target, method, retVal);
@@ -747,7 +747,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 		@Nullable
 		public Object proceed() throws Throwable {
 			try {
-				return super.proceed();
+				return super.proceed(); //调用父类的方法
 			}
 			catch (RuntimeException ex) {
 				throw ex;
@@ -868,7 +868,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 				return INVOKE_HASHCODE;
 			}
 			Class<?> targetClass = this.advised.getTargetClass();
-			// Proxy is not yet available, but that shouldn't matter.
+			// Proxy is not yet available, but that shouldn't matter. 责任链模式在执行目标方法前后执行其他的通知方法
 			List<?> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
 			boolean haveAdvice = !chain.isEmpty();
 			boolean exposeProxy = this.advised.isExposeProxy();

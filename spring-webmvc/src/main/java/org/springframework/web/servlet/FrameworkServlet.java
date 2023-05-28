@@ -514,7 +514,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 
-	/**
+	/** 追踪看web应用启动做了什么。
 	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
 	 * have been set. Creates this servlet's WebApplicationContext.
 	 */
@@ -527,7 +527,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 
 		try {
-			this.webApplicationContext = initWebApplicationContext();
+			this.webApplicationContext = initWebApplicationContext(); //初始化WebIOC容器
 			initFrameworkServlet();
 		}
 		catch (ServletException | RuntimeException ex) {
@@ -559,12 +559,12 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 */
 	protected WebApplicationContext initWebApplicationContext() {
 		WebApplicationContext rootContext =
-				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		WebApplicationContext wac = null;
+				WebApplicationContextUtils.getWebApplicationContext(getServletContext()); //父容器
+		WebApplicationContext wac = null; //先会获取之前的 WebApplicationContext（构建父子容器）
 
 		if (this.webApplicationContext != null) {
 			// A context instance was injected at construction time -> use it
-			wac = this.webApplicationContext;
+			wac = this.webApplicationContext; //当前的web-ioc容器
 			if (wac instanceof ConfigurableWebApplicationContext) {
 				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;
 				if (!cwac.isActive()) {
@@ -573,9 +573,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 					if (cwac.getParent() == null) {
 						// The context instance was injected without an explicit parent -> set
 						// the root application context (if any; may be null) as the parent
-						cwac.setParent(rootContext);
+						cwac.setParent(rootContext); //父子容器的体现，
 					}
-					configureAndRefreshWebApplicationContext(cwac);
+					configureAndRefreshWebApplicationContext(cwac); //配置并且刷新容器
 				}
 			}
 		}
@@ -851,7 +851,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #refresh()
 	 */
 	protected void onRefresh(ApplicationContext context) {
-		// For subclasses: do nothing by default.
+		// For subclasses: do nothing by default. 留给子类的模板方法
 	}
 
 	/**
@@ -980,7 +980,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		super.doTrace(request, response);
 	}
 
-	/**
+	/** SpringMVC底层统一处理请求的入口
 	 * Process this request, publishing an event regardless of the outcome.
 	 * <p>The actual event handling is performed by the abstract
 	 * {@link #doService} template method.

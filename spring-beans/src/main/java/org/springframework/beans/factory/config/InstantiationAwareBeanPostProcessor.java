@@ -91,7 +91,7 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @see #postProcessBeforeInstantiation
 	 */
 	default boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
-		return true;
+		return true;  //是否让剩下的后置处理器对bean继续进行处理
 	}
 
 	/**

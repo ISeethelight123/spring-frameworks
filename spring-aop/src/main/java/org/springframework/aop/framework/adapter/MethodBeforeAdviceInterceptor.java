@@ -38,7 +38,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class MethodBeforeAdviceInterceptor implements MethodInterceptor, BeforeAdvice, Serializable {
 
-	private final MethodBeforeAdvice advice;
+	private final MethodBeforeAdvice advice; //对应的是之前增强的详细信息
 
 
 	/**

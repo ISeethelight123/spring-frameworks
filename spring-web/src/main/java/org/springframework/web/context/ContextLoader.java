@@ -398,7 +398,7 @@ public class ContextLoader {
 		}
 
 		customizeContext(sc, wac);
-		wac.refresh();
+		wac.refresh(); //容器初始化
 	}
 
 	/**

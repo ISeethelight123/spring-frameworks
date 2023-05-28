@@ -278,7 +278,7 @@ public abstract class RequestContextUtils {
 
 		FlashMapManager manager = getFlashMapManager(request);
 		Assert.state(manager != null, "No FlashMapManager. Is this a DispatcherServlet handled request?");
-		manager.saveOutputFlashMap(flashMap, request, response);
+		manager.saveOutputFlashMap(flashMap, request, response); //重定向的数据
 	}
 
 }

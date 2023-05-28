@@ -79,7 +79,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 		String servletName = getServletName();
 		Assert.hasLength(servletName, "getServletName() must not return null or empty");
 
-		WebApplicationContext servletAppContext = createServletApplicationContext();
+		WebApplicationContext servletAppContext = createServletApplicationContext(); //创建Servlet容器
 		Assert.notNull(servletAppContext, "createServletApplicationContext() must not return null");
 
 		FrameworkServlet dispatcherServlet = createDispatcherServlet(servletAppContext);
@@ -93,7 +93,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 		}
 
 		registration.setLoadOnStartup(1);
-		registration.addMapping(getServletMappings());
+		registration.addMapping(getServletMappings()); //根据我们指定的DispatcherServlet的路径进行注册
 		registration.setAsyncSupported(isAsyncSupported());
 
 		Filter[] filters = getServletFilters();
@@ -222,7 +222,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	 * Optionally perform further registration customization once
 	 * {@link #registerDispatcherServlet(ServletContext)} has completed.
 	 * @param registration the {@code DispatcherServlet} registration to be customized
-	 * @see #registerDispatcherServlet(ServletContext)
+	 * @see #registerDispatcherServlet(ServletContext)  使用这个模板方法继续定制
 	 */
 	protected void customizeRegistration(ServletRegistration.Dynamic registration) {
 	}

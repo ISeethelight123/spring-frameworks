@@ -53,7 +53,7 @@ public abstract class AbstractDetectingUrlHandlerMapping extends AbstractUrlHand
 	 * Calls the {@link #detectHandlers()} method in addition to the
 	 * superclass's initialization.
 	 */
-	@Override
+	@Override  //
 	public void initApplicationContext() throws ApplicationContextException {
 		super.initApplicationContext();
 		detectHandlers();
@@ -75,7 +75,7 @@ public abstract class AbstractDetectingUrlHandlerMapping extends AbstractUrlHand
 
 		// Take any bean name that we can determine URLs for.
 		for (String beanName : beanNames) {
-			String[] urls = determineUrlsForHandler(beanName);
+			String[] urls = determineUrlsForHandler(beanName); //模板模式
 			if (!ObjectUtils.isEmpty(urls)) {
 				// URL paths found: Let's consider it a handler.
 				registerHandler(urls, beanName);

@@ -134,11 +134,11 @@ public class InternalResourceView extends AbstractUrlBasedView {
 	 * Render the internal resource given the specified model.
 	 * This includes setting the model as request attributes.
 	 */
-	@Override
+	@Override  //真正的渲染逻辑
 	protected void renderMergedOutputModel(
 			Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		// Expose the model object as request attributes.
+		//暴露Model中的数据作为请求域的数据 Expose the model object as request attributes.
 		exposeModelAsRequestAttributes(model, request);
 
 		// Expose helpers as request attributes, if any.
