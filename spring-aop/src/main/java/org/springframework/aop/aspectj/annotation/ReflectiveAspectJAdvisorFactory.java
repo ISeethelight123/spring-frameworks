@@ -71,7 +71,7 @@ import org.springframework.util.comparator.InstanceComparator;
 @SuppressWarnings("serial")
 public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFactory implements Serializable {
 
-	// Exclude @Pointcut methods
+	// Exclude @Pointcut methods  排除@Pointcut methods
 	private static final MethodFilter adviceMethodFilter = ReflectionUtils.USER_DECLARED_METHODS
 			.and(method -> (AnnotationUtils.getAnnotation(method, Pointcut.class) == null));
 
@@ -166,7 +166,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 	private List<Method> getAdvisorMethods(Class<?> aspectClass) {
 		List<Method> methods = new ArrayList<>();
-		ReflectionUtils.doWithMethods(aspectClass, methods::add, adviceMethodFilter);
+		ReflectionUtils.doWithMethods(aspectClass, methods::add, adviceMethodFilter); //父类的方法会一起收集起来
 		if (methods.size() > 1) {
 			methods.sort(adviceMethodComparator);
 		}

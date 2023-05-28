@@ -47,7 +47,7 @@ public class ProxyConfig implements Serializable {
 
 	/**
 	 * Set whether to proxy the target class directly, instead of just proxying
-	 * specific interfaces. Default is "false".
+	 * specific interfaces. Default is "false". 是否直接代理目标类？
 	 * <p>Set this to "true" to force proxying for the TargetSource's exposed
 	 * target class. If that target class is an interface, a JDK proxy will be
 	 * created for the given interface. If that target class is any other class,

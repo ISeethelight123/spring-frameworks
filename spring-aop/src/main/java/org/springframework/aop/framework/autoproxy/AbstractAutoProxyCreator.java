@@ -239,7 +239,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		this.earlyProxyReferences.put(cacheKey, bean);
 		return wrapIfNecessary(bean, beanName, cacheKey);
 	}
-
+	//bean后置处理器重写方法
 	@Override
 	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) {
 		Object cacheKey = getCacheKey(beanClass, beanName);
