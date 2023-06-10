@@ -422,6 +422,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			this.earlyApplicationEvents.add(applicationEvent);
 		}
 		else {
+			//广播
 			getApplicationEventMulticaster().multicastEvent(applicationEvent, eventType);
 		}
 
@@ -989,7 +990,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// 首先将刷新传播到生命周期处理器
 		getLifecycleProcessor().onRefresh();
 
-		// Publish the final event.
+		// 发布事件
 		publishEvent(new ContextRefreshedEvent(this));
 
 		// Participate in LiveBeansView MBean, if active.

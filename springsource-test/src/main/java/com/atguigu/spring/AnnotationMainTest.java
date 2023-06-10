@@ -2,7 +2,11 @@ package com.atguigu.spring;
 
 
 import com.atguigu.spring.aop.HelloService;
+import com.atguigu.spring.circle.A;
 import com.atguigu.spring.config.MainConfig;
+import com.atguigu.spring.listener.AppEventPublisher;
+import com.atguigu.spring.listener.ChangeEvent;
+import com.atguigu.spring.listener.MessageEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -24,19 +28,19 @@ public class AnnotationMainTest {
 
 		//循环引用,原理测试
 		//AOP,原理测试
-		HelloService helloService = applicationContext.getBean(HelloService.class);
+//		HelloService helloService = applicationContext.getBean(HelloService.class);
 
 
-		helloService.sayHello("zhangsan");
+//		helloService.sayHello("zhangsan");
 
 
 
 
 		//测试事件
-//		AppEventPublisher eventPublisher = applicationContext.getBean(AppEventPublisher.class);
-//		eventPublisher.publish(new A());
-//		eventPublisher.publish(new MessageEvent("hello，你好"));
-//		eventPublisher.publish(new ChangeEvent(eventPublisher,"sending..."));
+		AppEventPublisher eventPublisher = applicationContext.getBean(AppEventPublisher.class);
+		eventPublisher.publish(new A());
+		eventPublisher.publish(new MessageEvent("hello，你好"));
+		eventPublisher.publish(new ChangeEvent(eventPublisher,"sending..."));
 
 
 //		Person bean = applicationContext.getBean(Person.class);
