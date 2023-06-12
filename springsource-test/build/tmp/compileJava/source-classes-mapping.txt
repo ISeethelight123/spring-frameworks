@@ -8,8 +8,8 @@ com/atguigu/spring/circle/A.java
  com.atguigu.spring.circle.A
 com/atguigu/spring/bean/Hello.java
  com.atguigu.spring.bean.Hello
-com/atguigu/spring/AnnotationMainTest.java
- com.atguigu.spring.AnnotationMainTest
+com/atguigu/spring/processor/bean/MyInitializingBean.java
+ com.atguigu.spring.processor.bean.MyInitializingBean
 com/atguigu/spring/config/AopConfig.java
  com.atguigu.spring.config.AopConfig
 com/atguigu/spring/config/MainConfig.java
@@ -30,13 +30,21 @@ com/atguigu/spring/processor/bean/MyMergedBeanDefinitionPostProcessor.java
  com.atguigu.spring.processor.bean.MyMergedBeanDefinitionPostProcessor
 com/atguigu/spring/processor/factory/MyBeanDefinitionRegistryPostProcessor.java
  com.atguigu.spring.processor.factory.MyBeanDefinitionRegistryPostProcessor
-com/atguigu/spring/listener/App.java
- com.atguigu.spring.listener.App
-com/atguigu/spring/circle/B.java
- com.atguigu.spring.circle.B
 com/atguigu/spring/bean/Person.java
  com.atguigu.spring.bean.Person
-com/atguigu/spring/processor/bean/MyInitializingBean.java
- com.atguigu.spring.processor.bean.MyInitializingBean
+com/atguigu/spring/circle/B.java
+ com.atguigu.spring.circle.B
+com/atguigu/spring/listener/MessageEvent.java
+ com.atguigu.spring.listener.MessageEvent
+com/atguigu/spring/listener/App.java
+ com.atguigu.spring.listener.App
+com/atguigu/spring/listener/AppEventListener.java
+ com.atguigu.spring.listener.AppEventListener
+com/atguigu/spring/listener/ChangeEvent.java
+ com.atguigu.spring.listener.ChangeEvent
+com/atguigu/spring/listener/AppEventPublisher.java
+ com.atguigu.spring.listener.AppEventPublisher
+com/atguigu/spring/AnnotationMainTest.java
+ com.atguigu.spring.AnnotationMainTest
 com/atguigu/spring/aop/MyMS.java
  com.atguigu.spring.aop.MyMS

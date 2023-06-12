@@ -20,10 +20,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 /**
+ * 在Servlet 3.0+中可以支持配置的方式，而不是web.xml
  * Interface to be implemented in Servlet 3.0+ environments in order to configure the
  * {@link ServletContext} programmatically -- as opposed to (or possibly in conjunction
  * with) the traditional {@code web.xml}-based approach.
- *
+ * 此 SPI 的实现将由 SpringServletContainerInitializer自动检测，它本身由任何 Servlet 3.0 容器自动引导。
+ * 请参阅 {@linkplain SpringServletContainerInitializer its Javadoc} 了解有关此引导机制的详细信息。
  * <p>Implementations of this SPI will be detected automatically by {@link
  * SpringServletContainerInitializer}, which itself is bootstrapped automatically
  * by any Servlet 3.0 container. See {@linkplain SpringServletContainerInitializer its
@@ -51,7 +53,7 @@ import javax.servlet.ServletException;
  *   &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
  *   &lt;url-pattern&gt;/&lt;/url-pattern&gt;
  * &lt;/servlet-mapping&gt;</pre>
- *
+ * 等同于以下代码：
  * <h3>The code-based approach with {@code WebApplicationInitializer}</h3>
  * Here is the equivalent {@code DispatcherServlet} registration logic,
  * {@code WebApplicationInitializer}-style:
