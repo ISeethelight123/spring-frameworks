@@ -69,7 +69,7 @@ public class SourceFilteringListener implements GenericApplicationListener, Smar
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
-		if (event.getSource() == this.source) {
+		if (event.getSource() == this.source) { //比对是否是同一个source,是同一个才处理
 			onApplicationEventInternal(event);
 		}
 	}

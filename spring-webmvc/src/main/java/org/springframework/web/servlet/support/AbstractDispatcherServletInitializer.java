@@ -58,9 +58,16 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	public static final String DEFAULT_SERVLET_NAME = "dispatcher";
 
 
+	/**
+	 * onStartup方法执行完，tomcat完成启动，接下来会执行回调
+	 * @param servletContext the {@code ServletContext} to initialize
+	 * @throws ServletException
+	 */
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
+		//调用父类的onStartup方法，这里面初始了根容器，并且添加到ContextLoaderListener中
 		super.onStartup(servletContext);
+		//初始化DispatcherServlet
 		registerDispatcherServlet(servletContext);
 	}
 
@@ -78,10 +85,10 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	protected void registerDispatcherServlet(ServletContext servletContext) {
 		String servletName = getServletName();
 		Assert.hasLength(servletName, "getServletName() must not return null or empty");
-
-		WebApplicationContext servletAppContext = createServletApplicationContext(); //创建Servlet容器
+		// 子类实现 创建Servlet容器
+		WebApplicationContext servletAppContext = createServletApplicationContext();
 		Assert.notNull(servletAppContext, "createServletApplicationContext() must not return null");
-
+		//初始化一个DispatcherServlet
 		FrameworkServlet dispatcherServlet = createDispatcherServlet(servletAppContext);
 		Assert.notNull(dispatcherServlet, "createDispatcherServlet(WebApplicationContext) must not return null");
 		dispatcherServlet.setContextInitializers(getServletApplicationContextInitializers());
@@ -93,7 +100,9 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 		}
 
 		registration.setLoadOnStartup(1);
-		registration.addMapping(getServletMappings()); //根据我们指定的DispatcherServlet的路径进行注册
+		//根据我们指定的DispatcherServlet的路径进行注册
+		//getServletMappings()提供给子类注册
+		registration.addMapping(getServletMappings());
 		registration.setAsyncSupported(isAsyncSupported());
 
 		Filter[] filters = getServletFilters();

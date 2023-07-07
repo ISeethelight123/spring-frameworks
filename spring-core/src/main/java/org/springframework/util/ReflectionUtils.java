@@ -172,6 +172,7 @@ public abstract class ReflectionUtils {
 	// Constructor handling
 
 	/**
+	 * 获取给定类和参数的可访问构造函数
 	 * Obtain an accessible constructor for the given class and parameters.
 	 * @param clazz the clazz to check
 	 * @param parameterTypes the parameter types of the desired constructor

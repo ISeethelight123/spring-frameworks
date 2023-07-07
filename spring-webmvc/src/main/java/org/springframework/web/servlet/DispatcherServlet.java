@@ -510,7 +510,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * no multipart handling is provided.
 	 */
 	private void initMultipartResolver(ApplicationContext context) {
-		try {
+		try {// multipartResolver
 			this.multipartResolver = context.getBean(MULTIPART_RESOLVER_BEAN_NAME, MultipartResolver.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Detected " + this.multipartResolver);
@@ -534,7 +534,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * we default to AcceptHeaderLocaleResolver.
 	 */
 	private void initLocaleResolver(ApplicationContext context) {
-		try { //容器中先来获取
+		try { //容器中先来获取 localeResolver
 			this.localeResolver = context.getBean(LOCALE_RESOLVER_BEAN_NAME, LocaleResolver.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Detected " + this.localeResolver);
@@ -559,7 +559,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * we default to a FixedThemeResolver.
 	 */
 	private void initThemeResolver(ApplicationContext context) {
-		try {
+		try { //themeResolver
 			this.themeResolver = context.getBean(THEME_RESOLVER_BEAN_NAME, ThemeResolver.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Detected " + this.themeResolver);
@@ -587,7 +587,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		this.handlerMappings = null;
 
 		if (this.detectAllHandlerMappings) {
-			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
+			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts. 父容器，子容器里都去查找
 			Map<String, HandlerMapping> matchingBeans =
 					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, true, false);
 			if (!matchingBeans.isEmpty()) {
@@ -618,7 +618,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		for (HandlerMapping mapping : this.handlerMappings) {
 			if (mapping.usesPathPatterns()) {
-				this.parseRequestPath = true;
+				this.parseRequestPath = true; //这个配置干啥的？
 				break;
 			}
 		}
@@ -773,7 +773,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * {@code org.springframework.web.servlet.support.DefaultFlashMapManager}.
 	 */
 	private void initFlashMapManager(ApplicationContext context) {
-		try {
+		try { //只在web容器查找
 			this.flashMapManager = context.getBean(FLASH_MAP_MANAGER_BEAN_NAME, FlashMapManager.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Detected " + this.flashMapManager.getClass().getSimpleName());
@@ -943,7 +943,8 @@ public class DispatcherServlet extends FrameworkServlet {
 		request.setAttribute(THEME_RESOLVER_ATTRIBUTE, this.themeResolver); //主题解析器
 		request.setAttribute(THEME_SOURCE_ATTRIBUTE, getThemeSource());
 
-		if (this.flashMapManager != null) { //闪存管理器（重定向携带数据）
+		//闪存管理器（重定向携带数据）
+		if (this.flashMapManager != null) {
 			FlashMap inputFlashMap = this.flashMapManager.retrieveAndUpdate(request, response);
 			if (inputFlashMap != null) {
 				request.setAttribute(INPUT_FLASH_MAP_ATTRIBUTE, Collections.unmodifiableMap(inputFlashMap));
@@ -959,7 +960,8 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		try {
-			doDispatch(request, response); //处理派发功能
+			//处理派发功能
+			doDispatch(request, response);
 		}
 		finally {
 			if (!WebAsyncUtils.getAsyncManager(request).isConcurrentHandlingStarted()) {
@@ -1007,6 +1009,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 处理对程序的实际调度。
 	 * Process the actual dispatching to the handler.
 	 * <p>The handler will be obtained by applying the servlet's HandlerMappings in order.
 	 * The HandlerAdapter will be obtained by querying the servlet's installed HandlerAdapters
@@ -1032,7 +1035,8 @@ public class DispatcherServlet extends FrameworkServlet {
 				processedRequest = checkMultipart(request); //检查当前是否文件上传请求
 				multipartRequestParsed = (processedRequest != request);
 
-				//构造出了【目标方法+拦截器整个链路】决定使用哪个Handler处理当前请求 Determine handler for the current request.
+				//构造出了【目标方法+拦截器整个链路】决定使用哪个Handler处理当前请求
+				// Determine handler for the current request.
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {  //如果找不到人处理，就send 404
 					noHandlerFound(processedRequest, response);
@@ -1183,7 +1187,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @see MultipartResolver#resolveMultipart
 	 */
 	protected HttpServletRequest checkMultipart(HttpServletRequest request) throws MultipartException {
-		if (this.multipartResolver != null && this.multipartResolver.isMultipart(request)) { //使用文件上传解析器来判断是否文件上传请求
+		//使用文件上传解析器来判断是否文件上传请求
+		if (this.multipartResolver != null && this.multipartResolver.isMultipart(request)) {
 			if (WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class) != null) {
 				if (request.getDispatcherType().equals(DispatcherType.REQUEST)) {
 					logger.trace("Request already resolved to MultipartHttpServletRequest, e.g. by MultipartFilter");

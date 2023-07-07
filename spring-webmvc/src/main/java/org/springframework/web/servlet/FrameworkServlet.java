@@ -204,7 +204,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	/** Expose LocaleContext and RequestAttributes as inheritable for child threads?. */
 	private boolean threadContextInheritable = false;
 
-	/** Should we dispatch an HTTP OPTIONS request to {@link #doService}?. */
+	/** Should we dispatch an HTTP OPTIONS request to {@link #doService}?.
+	 *  我们应该将HTTP OPTIONS请求分派给{@link doService}吗？
+	 * */
 	private boolean dispatchOptionsRequest = false;
 
 	/** Should we dispatch an HTTP TRACE request to {@link #doService}?. */
@@ -220,7 +222,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	/** If the WebApplicationContext was injected via {@link #setApplicationContext}. */
 	private boolean webApplicationContextInjected = false;
 
-	/** Flag used to detect whether onRefresh has already been called. */
+	/** Flag used to detect whether onRefresh has already been called.用于检测是否已调用 onRefresh 的标志 */
 	private volatile boolean refreshEventReceived;
 
 	/** Monitor for synchronized onRefresh execution. */
@@ -514,7 +516,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 
-	/** 追踪看web应用启动做了什么。
+	/**
+	 * 追踪看web应用启动做了什么。
 	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
 	 * have been set. Creates this servlet's WebApplicationContext.
 	 */
@@ -527,8 +530,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 
 		try {
-			this.webApplicationContext = initWebApplicationContext(); //初始化WebIOC容器
-			initFrameworkServlet();
+			//刷新web-ioc容器
+			this.webApplicationContext = initWebApplicationContext();
+			initFrameworkServlet();//子类去实现
 		}
 		catch (ServletException | RuntimeException ex) {
 			logger.error("Context initialization failed", ex);
@@ -558,13 +562,14 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #setContextConfigLocation
 	 */
 	protected WebApplicationContext initWebApplicationContext() {
+		//ioc容器
 		WebApplicationContext rootContext =
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext()); //父容器
 		WebApplicationContext wac = null; //先会获取之前的 WebApplicationContext（构建父子容器）
 
 		if (this.webApplicationContext != null) {
-			// A context instance was injected at construction time -> use it
-			wac = this.webApplicationContext; //当前的web-ioc容器
+			// 子容器
+			wac = this.webApplicationContext; //当前的web容器
 			if (wac instanceof ConfigurableWebApplicationContext) {
 				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;
 				if (!cwac.isActive()) {
@@ -687,6 +692,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		wac.setServletContext(getServletContext());
 		wac.setServletConfig(getServletConfig());
 		wac.setNamespace(getNamespace());
+		// SourceFilteringListener有什么用？ 刷新DispatcherServlet九大组件, 最后是这个监听器处理ContextRefreshListener
 		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));
 
 		// The wac environment's #initPropertySources will be called in any case when the context
@@ -808,6 +814,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
+	 * 子类可以重写此方法以执行它们所需的任何初始化。
 	 * This method will be invoked after any bean properties have been set and
 	 * the WebApplicationContext has been loaded. The default implementation is empty;
 	 * subclasses may override this method to perform any initialization they require.
@@ -869,7 +876,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
-	 * Override the parent class implementation in order to intercept PATCH requests.
+	 * Override the parent class implementation in order to intercept PATCH requests.重写父类实现以拦截 PATCH 请求。
 	 */
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)

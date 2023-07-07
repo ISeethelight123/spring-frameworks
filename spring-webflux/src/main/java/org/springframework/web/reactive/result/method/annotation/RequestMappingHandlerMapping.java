@@ -128,6 +128,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 
 
 	/**
+	 * 期望处理程序具有类型级 @{@link Controller} 注释
 	 * {@inheritDoc}
 	 * Expects a handler to have a type-level @{@link Controller} annotation.
 	 */

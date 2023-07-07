@@ -57,10 +57,12 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 	 * @param servletContext the servlet context to register the listener against
 	 */
 	protected void registerContextLoaderListener(ServletContext servletContext) {
-		WebApplicationContext rootAppContext = createRootApplicationContext(); //创建一个根容器
+		//创建一个根容器 , 模板方法，交给子类实现
+		WebApplicationContext rootAppContext = createRootApplicationContext();
 		if (rootAppContext != null) {
 			ContextLoaderListener listener = new ContextLoaderListener(rootAppContext);
 			listener.setContextInitializers(getRootApplicationContextInitializers());
+			//servletContext中添加Listener
 			servletContext.addListener(listener);
 		}
 		else {
@@ -84,6 +86,7 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 	protected abstract WebApplicationContext createRootApplicationContext();
 
 	/**
+	 * 指定要应用于用于创建 {@code 上下文加载器侦听器} 的根应用程序上下文初始值设定项。
 	 * Specify application context initializers to be applied to the root application
 	 * context that the {@code ContextLoaderListener} is being created with.
 	 * @since 4.2

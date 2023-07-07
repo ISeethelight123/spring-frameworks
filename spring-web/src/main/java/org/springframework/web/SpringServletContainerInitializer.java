@@ -112,7 +112,7 @@ import org.springframework.util.ReflectionUtils;
  */
 @HandlesTypes(WebApplicationInitializer.class)
 public class SpringServletContainerInitializer implements ServletContainerInitializer {
-
+	// ServletContainerInitializer servlet提供的
 	/**
 	 * Delegate the {@code ServletContext} to any {@link WebApplicationInitializer}
 	 * implementations present on the application classpath.
@@ -154,6 +154,7 @@ public class SpringServletContainerInitializer implements ServletContainerInitia
 						WebApplicationInitializer.class.isAssignableFrom(waiClass)) {
 					try {
 						initializers.add((WebApplicationInitializer) //集合负责保存满足上面条件的类
+								//反射创建对象
 								ReflectionUtils.accessibleConstructor(waiClass).newInstance());
 					}
 					catch (Throwable ex) {
@@ -171,7 +172,9 @@ public class SpringServletContainerInitializer implements ServletContainerInitia
 		servletContext.log(initializers.size() + " Spring WebApplicationInitializers detected on classpath");
 		AnnotationAwareOrderComparator.sort(initializers);
 		for (WebApplicationInitializer initializer : initializers) {
-			initializer.onStartup(servletContext); //所有的 WebApplicationInitializer 的 onStartup
+			//所有的 WebApplicationInitializer 的 onStartup
+			//springmvc从这里启动
+			initializer.onStartup(servletContext);
 		}
 	}
 
